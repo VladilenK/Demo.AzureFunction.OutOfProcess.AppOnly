@@ -46,19 +46,24 @@ namespace ProvisioningDemo{
 
             try
             {
-                using (var pnpContext = await contextFactory.CreateAsync(uri))
+                using (var pnpContext = await contextFactory.CreateAsync("Default"))
                 {
                     response = req.CreateResponse(HttpStatusCode.OK);
                     response.Headers.Add("Content-Type", "application/json");
                     logger.LogInformation($"Getting site details: {url}");
                     //await pnpContext.Site.LoadAsync(p => p.RootWeb.All);
-                    var site = await pnpContext.Site.GetAsync(p => p.All);
+                    //var site = await pnpContext.Site.GetAsync(p => p.All);
+
+                    var siteToCheckDetails = await pnpContext.GetSiteCollectionManager().GetSiteCollectionWithDetailsAsync(uri);
+
                     await response.WriteStringAsync(JsonSerializer.Serialize(new { 
-                        siteId      = site.Id, 
+                        siteId      = siteToCheckDetails.Id,
                         //siteName    = site.RootWeb.Title,
                         //template    = site.RootWeb.WebTemplate,
-                        url         = site.Url,
-                        groupId     = site.GroupId
+                        url         = siteToCheckDetails.Url,
+                        templateId     = siteToCheckDetails.TemplateId,
+                        owner = siteToCheckDetails.SiteOwnerName,
+                        createdBy = siteToCheckDetails.CreatedBy
                     }));
 
 
