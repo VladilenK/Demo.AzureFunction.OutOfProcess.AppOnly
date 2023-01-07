@@ -5,6 +5,18 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="__blobstorage__\**" />
+    <EmbeddedResource Remove="__blobstorage__\**" />
+    <None Remove="__blobstorage__\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="__azurite_db_blob_extent__.json" />
+    <None Remove="__azurite_db_blob__.json" />
+    <None Remove="__azurite_db_queue_extent__.json" />
+    <None Remove="__azurite_db_queue__.json" />
+    <None Remove="__azurite_db_table__.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" OutputItemType="Analyzer" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.10.0" />
