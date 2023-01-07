@@ -42,6 +42,7 @@ namespace ProvisioningDemo{
             var uri = new Uri(url);
 
             HttpResponseData response = null;
+            logger.LogInformation($"Getting site: {url}");
 
             try
             {
@@ -49,12 +50,17 @@ namespace ProvisioningDemo{
                 {
                     response = req.CreateResponse(HttpStatusCode.OK);
                     response.Headers.Add("Content-Type", "application/json");
-                  
-                    logger.LogInformation($"Getting site: {url}");
+                    logger.LogInformation($"Getting site details: {url}");
+                    //await pnpContext.Site.LoadAsync(p => p.RootWeb.All);
+                    var site = await pnpContext.Site.GetAsync(p => p.All);
+                    await response.WriteStringAsync(JsonSerializer.Serialize(new { 
+                        siteId      = site.Id, 
+                        //siteName    = site.RootWeb.Title,
+                        //template    = site.RootWeb.WebTemplate,
+                        url         = site.Url,
+                        groupId     = site.GroupId
+                    }));
 
-                    // Get site collection
-                    // Return the URL of the created site
-                    await response.WriteStringAsync(JsonSerializer.Serialize(new { siteName = pnpContext.Site.Id}));
 
                     return response;
                 }
